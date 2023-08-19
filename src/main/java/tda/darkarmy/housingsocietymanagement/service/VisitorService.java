@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tda.darkarmy.housingsocietymanagement.exception.ResourceNotFoundException;
 import tda.darkarmy.housingsocietymanagement.model.Flat;
+import tda.darkarmy.housingsocietymanagement.model.Notification;
 import tda.darkarmy.housingsocietymanagement.model.User;
 import tda.darkarmy.housingsocietymanagement.model.Visitor;
 import tda.darkarmy.housingsocietymanagement.repository.FlatRepository;
@@ -24,6 +25,9 @@ public class VisitorService {
     @Autowired
     private FlatRepository flatRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<Visitor> getAllVisitors() {
         return visitorRepository.findAll();
     }
@@ -35,9 +39,15 @@ public class VisitorService {
 
     public Visitor createVisitor(Visitor visitor) {
         Flat flat = flatRepository.findById(visitor.getFlatId()).orElseThrow(()-> new ResourceNotFoundException("Flat not found"));
-        //User user = userRepository.findById()
+        User user = userRepository.findById(flat.getUser().getId()).orElseThrow();
+        Visitor visitor1 = visitorRepository.save(visitor);
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setTitle(visitor.getName() + " is here to see you. You can call him on: "+visitor.getContactNumber());
+        notification.setDetail(visitor1.toString());
 
-        return visitorRepository.save(visitor);
+        notificationService.create(notification);
+        return visitor1;
     }
 
     public Visitor updateVisitor(Long id, Visitor visitor) {

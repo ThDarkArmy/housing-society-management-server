@@ -30,6 +30,8 @@ public class NotificationService {
     }
 
     public Notification create(Notification notification){
-        return notificationRepository.save(notification);
+        Notification notification1 = notificationRepository.save(notification);
+        //System.out.println("\n\n\nnotification: "+ notification1 );
+        return notification1;
     }
 }

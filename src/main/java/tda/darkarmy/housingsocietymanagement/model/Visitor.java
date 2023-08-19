@@ -76,7 +76,7 @@ public class Visitor {
 
     @Override
     public String toString() {
-        return "Visitor{" +
+        return "{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

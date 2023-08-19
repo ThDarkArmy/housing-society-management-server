@@ -20,7 +20,7 @@ public class HousingsocietymanagementApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		UserDto user = new UserDto("Dark Army", "dark@gmail.com", "8899889988", "password", "ADMIN", "Bengaluru");
+		UserDto user = new UserDto("Team23", "team23@gmail.com", "8899889988", "password", "ADMIN", "Mumbai");
 
 		userService.createUser(user);
 
