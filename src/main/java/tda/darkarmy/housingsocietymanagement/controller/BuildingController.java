@@ -24,7 +24,13 @@ public class BuildingController {
         return new ResponseEntity<>(buildings, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/my-building")
+    public ResponseEntity<Building> getMyBuilding() {
+        Building building = buildingService.getMyBuilding();
+        return new ResponseEntity<>(building, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-id/{id}")
     public ResponseEntity<Building> getBuildingById(@PathVariable Long id) {
         Building building = buildingService.getBuildingById(id);
         return new ResponseEntity<>(building, HttpStatus.OK);

@@ -17,7 +17,6 @@ public class Flat {
     private Long rent;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name="user_id", nullable=true)
     private User user; // flat owner
 

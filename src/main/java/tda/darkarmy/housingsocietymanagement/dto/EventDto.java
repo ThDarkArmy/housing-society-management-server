@@ -1,36 +1,23 @@
-package tda.darkarmy.housingsocietymanagement.model;
+package tda.darkarmy.housingsocietymanagement.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
 
-@Entity
-public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import tda.darkarmy.housingsocietymanagement.model.Building;
+import tda.darkarmy.housingsocietymanagement.model.User;
+
+public class EventDto {
     private Long id;
 
     private String title;
     private String description;
     private String eventDateTime;
 
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
     private User user;  // organiser of event
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name="building_id", nullable=true)
     private Building building; // building in which event is organised
 
-    public Event() {
-    }
-
-    public Event(Long id, String title, String description, String eventDateTime) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.eventDateTime = eventDateTime;
+    public EventDto() {
     }
 
     public Long getId() {
@@ -79,17 +66,5 @@ public class Event {
 
     public void setBuilding(Building building) {
         this.building = building;
-    }
-
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", eventDataTime='" + eventDateTime + '\'' +
-                ", user=" + user +
-                ", building=" + building +
-                '}';
     }
 }

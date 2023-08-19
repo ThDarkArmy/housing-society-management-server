@@ -23,7 +23,13 @@ public class AnnouncementController {
         return new ResponseEntity<>(announcements, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/my-announcements")
+    public ResponseEntity<List<Announcement>> getAllMyAnnouncements() {
+        List<Announcement> announcements = announcementService.getMyAnnouncements();
+        return new ResponseEntity<>(announcements, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-id/{id}")
     public ResponseEntity<Announcement> getAnnouncementById(@PathVariable Long id) {
         Announcement announcement = announcementService.getAnnouncementById(id);
         return new ResponseEntity<>(announcement, HttpStatus.OK);

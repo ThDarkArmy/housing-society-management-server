@@ -33,6 +33,12 @@ public class AnnouncementService {
                 .orElseThrow(() -> new ResourceNotFoundException("Announcement not found"));
     }
 
+    public List<Announcement> getMyAnnouncements() {
+        User user = userService.getLoggedInUser();
+        Building building = buildingRepository.findByUser(user);
+        return announcementRepository.findByBuilding(building);
+    }
+
     public Announcement createAnnouncement(Announcement announcement) {
         User user = userService.getLoggedInUser();
         Building building = buildingRepository.findByUser(user);
@@ -45,8 +51,7 @@ public class AnnouncementService {
                 .orElseThrow(() -> new ResourceNotFoundException("Announcement not found"));
         existingAnnouncement.setTitle(announcement.getTitle());
         existingAnnouncement.setDetail(announcement.getDetail());
-        existingAnnouncement.setBuilding(announcement.getBuilding());
-
+        existingAnnouncement.setBuilding(existingAnnouncement.getBuilding());
         return announcementRepository.save(existingAnnouncement);
     }
 

@@ -23,5 +23,13 @@ public class HousingsocietymanagementApplication implements CommandLineRunner {
 		UserDto user = new UserDto("Dark Army", "dark@gmail.com", "8899889988", "password", "ADMIN", "Bengaluru");
 
 		userService.createUser(user);
+
+		UserDto secretary = new UserDto("Secretary", "secretary@gmail.com", "8899889988", "password", "SECRETARY", "Bengaluru");
+
+		userService.createUser(secretary);
+
+		UserDto owner = new UserDto("Owner", "owner@gmail.com", "8899889988", "password", "USER", "Bengaluru");
+
+		userService.createUser(owner);
 	}
 }

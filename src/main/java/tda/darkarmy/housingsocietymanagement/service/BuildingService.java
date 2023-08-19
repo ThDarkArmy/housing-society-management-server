@@ -48,6 +48,10 @@ public class BuildingService {
     public Building getBuildingById(Long id){
         return buildingRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Building not found"));
     }
+
+    public Building getMyBuilding(){
+        return buildingRepository.findByUser(userService.getLoggedInUser());
+    }
     
     public Building assignSecretary(Long buildingId, Long userId){
         Building building = buildingRepository.findById(buildingId).orElseThrow(()-> new ResourceNotFoundException("Building not found"));
@@ -79,8 +83,9 @@ public class BuildingService {
     }
     
     public Building updateBuilding(Long id, Building building){
-        buildingRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Building not found"));
+        Building building1 = buildingRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Building not found"));
         building.setId(id);
+        building.setImageUrl(building1.getImageUrl());
         return buildingRepository.save(building);
     }
     

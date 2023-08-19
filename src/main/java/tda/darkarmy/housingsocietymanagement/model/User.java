@@ -1,12 +1,16 @@
 package tda.darkarmy.housingsocietymanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class User {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +23,7 @@ public class User {
         private String role;
         private String address;
 
-        @OneToOne(mappedBy = "user")
-        @JsonIgnore
+        @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)
         private Building building;
 
         @OneToMany(mappedBy = "user", cascade = CascadeType.DETACH)
@@ -31,6 +34,7 @@ public class User {
         private Set<Notification> notifications = new HashSet<>();
 
         @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+        @JsonIgnore
         private Set<Event> events = new HashSet<>();
 
         public User() {
