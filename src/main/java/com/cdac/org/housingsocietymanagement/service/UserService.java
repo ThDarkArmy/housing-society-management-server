@@ -7,6 +7,7 @@ import com.cdac.org.housingsocietymanagement.dto.UserDto;
 import com.cdac.org.housingsocietymanagement.exception.ResourceNotFoundException;
 import com.cdac.org.housingsocietymanagement.exception.UserAlreadyExistsException;
 import com.cdac.org.housingsocietymanagement.model.User;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +22,7 @@ import com.cdac.org.housingsocietymanagement.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -37,10 +39,15 @@ public class UserService {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    public User signup(UserDto userDto){
+    @Autowired
+    private MailSenderService mailSenderService;
+
+    public User signup(UserDto userDto) throws MessagingException {
 
         User user = userRepository.findByEmail(userDto.getEmail());
-        if(user!=null) throw new UserAlreadyExistsException("User with given email already exists");
+        if(user!=null && user.getVerified()) throw new UserAlreadyExistsException("User with given email already exists");
+
+        if(user!=null) userRepository.deleteById(user.getId());
 
         user = new User();
 
@@ -50,13 +57,20 @@ public class UserService {
         user.setContactNumber(userDto.getContactNumber());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setAddress(userDto.getAddress());
+        user.setVerified(userDto.getVerified());
 
+        Long otp = new Random().nextLong(9999 - 1000 + 1) + 1000;
+        user.setOtp(otp);
+
+        mailSenderService.send(user, otp.toString());
         return userRepository.save(user);
     }
 
     public LoginResponse login(LoginRequest loginRequest){
         User user =  userRepository.findByEmail(loginRequest.getEmail());
+
         if(user==null) throw new ResourceNotFoundException("User with given email not found.");
+        if(!user.getVerified()) throw new ResourceNotFoundException("User is not verified yet.");
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -64,7 +78,18 @@ public class UserService {
         String token = jwtTokenProvider.generateToken(authentication);
 
         return new LoginResponse(token, user);
+    }
 
+    public String verifyOtp(String email, Long otp){
+        User user =  userRepository.findByEmail(email);
+        System.out.println(user.getOtp()+" "+otp);
+        if(user.getOtp().longValue()==otp.longValue()){
+            user.setVerified(true);
+            userRepository.save(user);
+            return "Otp verified successfully";
+        }else{
+            return "Invalid otp";
+        }
     }
 
     public User updateUser(UserDto userDto, Long id){

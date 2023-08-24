@@ -1,5 +1,7 @@
 package com.cdac.org.housingsocietymanagement.controller;
 
+import com.cdac.org.housingsocietymanagement.dto.VerifyOtpDto;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +33,13 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody UserDto userDto){
+    public ResponseEntity<?> signup(@Valid @RequestBody UserDto userDto) throws MessagingException {
         return status(201).body(userService.signup(userDto));
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestBody VerifyOtpDto verifyOtpDto) {
+        return status(201).body(userService.verifyOtp(verifyOtpDto.getEmail(), verifyOtpDto.getOtp()));
     }
 
     @PostMapping("/login")

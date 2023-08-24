@@ -8,6 +8,7 @@ public class UserDto {
     private String password;
     private String role;
     private String address;
+    private Boolean isVerified = false;
 
     public UserDto() {
     }
@@ -19,6 +20,14 @@ public class UserDto {
         this.password = password;
         this.role = role;
         this.address = address;
+    }
+
+    public Boolean getVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
     }
 
     public String getName() {

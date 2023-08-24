@@ -21,6 +21,8 @@ public class User {
         private String password;
         private String role;
         private String address;
+        private Boolean isVerified = false;
+        private Long otp;
 
         @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)
         private Building building;
@@ -47,6 +49,22 @@ public class User {
                 this.password = password;
                 this.role = role;
                 this.address = address;
+        }
+
+        public Boolean getVerified() {
+                return isVerified;
+        }
+
+        public void setVerified(Boolean verified) {
+                isVerified = verified;
+        }
+
+        public Long getOtp() {
+                return otp;
+        }
+
+        public void setOtp(Long otp) {
+                this.otp = otp;
         }
 
         public Set<Flat> getFlats() {
@@ -149,8 +167,10 @@ public class User {
                         ", password='" + password + '\'' +
                         ", role='" + role + '\'' +
                         ", address='" + address + '\'' +
+                        ", isVerified=" + isVerified +
+                        ", otp=" + otp +
                         ", building=" + building +
-                        ", flat=" + flats +
+                        ", flats=" + flats +
                         ", notifications=" + notifications +
                         ", events=" + events +
                         '}';
