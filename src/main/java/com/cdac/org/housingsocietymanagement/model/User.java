@@ -21,7 +21,7 @@ public class User {
         private String password;
         private String role;
         private String address;
-        private Boolean isVerified = false;
+        private Boolean isVerified;
         private Long otp;
 
         @OneToOne(mappedBy = "user", cascade = CascadeType.DETACH)

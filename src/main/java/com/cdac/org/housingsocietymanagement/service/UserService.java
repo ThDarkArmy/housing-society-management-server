@@ -163,7 +163,7 @@ public class UserService {
             user.setContactNumber(userDto.getContactNumber());
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
             user.setAddress(userDto.getAddress());
-
+            user.setVerified(userDto.getVerified());
             userRepository.save(user);
         }
 

@@ -22,6 +22,16 @@ public class UserDto {
         this.address = address;
     }
 
+    public UserDto(String name, String email, String contactNumber, String password, String role, String address, Boolean isVerified) {
+        this.name = name;
+        this.email = email;
+        this.contactNumber = contactNumber;
+        this.password = password;
+        this.role = role;
+        this.address = address;
+        this.isVerified = isVerified;
+    }
+
     public Boolean getVerified() {
         return isVerified;
     }
