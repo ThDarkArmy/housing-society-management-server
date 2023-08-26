@@ -104,13 +104,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User changePassword(PasswordResetRequest resetRequest){
+    public User changePassword(PasswordResetRequest resetRequest) throws MessagingException {
 
         User user = userRepository.findByEmail(resetRequest.getEmail());
         if(user == null){
             throw new ResourceNotFoundException("No user found with given email.");
         }
-        user.setPassword(passwordEncoder.encode(resetRequest.getPassword()));
+        Long otp = new Random().nextLong(9999 - 1000 + 1) + 1000;
+        user.setOtp(otp);
+
+        mailSenderService.send(user, otp.toString());
+        user.setNewPassword(passwordEncoder.encode(resetRequest.getPassword()));
         return userRepository.save(user);
     }
 
@@ -167,5 +171,17 @@ public class UserService {
             userRepository.save(user);
         }
 
+    }
+
+    public String verifyOtpPassword(String email, Long otp) {
+        User user =  userRepository.findByEmail(email);
+        System.out.println(user.getOtp()+" "+otp);
+        if(user.getOtp().longValue()==otp.longValue()){
+            user.setPassword(user.getNewPassword());
+            userRepository.save(user);
+            return "Otp verified successfully";
+        }else{
+            return "Invalid otp";
+        }
     }
 }

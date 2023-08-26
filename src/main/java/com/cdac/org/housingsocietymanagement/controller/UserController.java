@@ -42,6 +42,11 @@ public class UserController {
         return status(201).body(userService.verifyOtp(verifyOtpDto.getEmail(), verifyOtpDto.getOtp()));
     }
 
+    @PostMapping("/verify-otp-password")
+    public ResponseEntity<?> verifyOtpPassword(@RequestBody VerifyOtpDto verifyOtpDto) {
+        return status(201).body(userService.verifyOtpPassword(verifyOtpDto.getEmail(), verifyOtpDto.getOtp()));
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest){
         return status(200).body(userService.login(loginRequest));
@@ -53,7 +58,7 @@ public class UserController {
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<?> changePassword(@RequestBody PasswordResetRequest request){
+    public ResponseEntity<?> changePassword(@RequestBody PasswordResetRequest request) throws MessagingException {
         return status(200).body(userService.changePassword(request));
     }
 

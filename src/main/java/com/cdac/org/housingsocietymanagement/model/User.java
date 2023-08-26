@@ -19,6 +19,7 @@ public class User {
         private String email;
         private String contactNumber;
         private String password;
+        private String newPassword;
         private String role;
         private String address;
         private Boolean isVerified;
@@ -49,6 +50,14 @@ public class User {
                 this.password = password;
                 this.role = role;
                 this.address = address;
+        }
+
+        public String getNewPassword() {
+                return newPassword;
+        }
+
+        public void setNewPassword(String newPassword) {
+                this.newPassword = newPassword;
         }
 
         public Boolean getVerified() {
